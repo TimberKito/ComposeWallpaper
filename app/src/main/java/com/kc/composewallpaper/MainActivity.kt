@@ -227,6 +227,7 @@ class MainActivity : AppCompatActivity() {
         binding.titleCompose.setContent {
             TitleCompose()
         }
+        initDrawer()
         val rootModelList: MutableList<RootModel> = mutableListOf()
         rootModelList.addAll(
             Json2ModelSerializer.parseJsonFile(assets.open("my_wallpaper.json"))
@@ -263,7 +264,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.tabLayout.setupWithViewPager(binding.viewpager)
         binding.viewpager.setPageTransformer(true, RotateDownPageTransformer())
-        initDrawer()
+
     }
 
     private fun initDrawer() {

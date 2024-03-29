@@ -17,7 +17,6 @@ data class DataModel(
     var previewThumb: String, var original: String, var source: String
 ) : Serializable {}
 
-
 data class RootModel(
     var name: String, var data: List<DataModel>
 ) : Serializable {}

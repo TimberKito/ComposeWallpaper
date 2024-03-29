@@ -21,18 +21,18 @@ class SystemUiController(activity: ComponentActivity) {
     fun setStatusBarVisibility(visible: Boolean) {
         val controller = WindowCompat.getInsetsController(window, window.decorView)
         if (visible) {
-            controller?.show(WindowInsetsCompat.Type.statusBars())
+            controller.show(WindowInsetsCompat.Type.statusBars())
         } else {
-            controller?.hide(WindowInsetsCompat.Type.statusBars())
+            controller.hide(WindowInsetsCompat.Type.statusBars())
         }
     }
 
     fun setSystemBarsVisibility(visible: Boolean) {
         val controller = WindowCompat.getInsetsController(window, window.decorView)
         if (visible) {
-            controller?.show(WindowInsetsCompat.Type.systemBars())
+            controller.show(WindowInsetsCompat.Type.systemBars())
         } else {
-            controller?.hide(WindowInsetsCompat.Type.systemBars())
+            controller.hide(WindowInsetsCompat.Type.systemBars())
         }
     }
 }
