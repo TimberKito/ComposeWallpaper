@@ -43,7 +43,6 @@ class ZoomOutPageTransformer : ViewPager.PageTransformer {
 
 }
 
-
 class RotateDownPageTransformer : ViewPager.PageTransformer {
     private var mRot = 0f
     override fun transformPage(view: View, position: Float) {

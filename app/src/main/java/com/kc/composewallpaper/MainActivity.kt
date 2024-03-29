@@ -227,23 +227,17 @@ class MainActivity : AppCompatActivity() {
         binding.titleCompose.setContent {
             TitleCompose()
         }
-        // 得到wallpaperModelList 并截取 3--15
         val rootModelList: MutableList<RootModel> = mutableListOf()
         rootModelList.addAll(
             Json2ModelSerializer.parseJsonFile(assets.open("my_wallpaper.json"))
         )
-        // 随机打乱List
         rootModelList.shuffle()
-        // 遍历父节点数量创建Tab
         for (i in rootModelList) {
-            // 添加
             binding.tabLayout.addTab(
-                // 新建自定义的item_tab
                 binding.tabLayout.newTab().setCustomView(R.layout.tab_item_view)
             )
         }
         fragmentList = arrayListOf()
-        // 遍历赋值Tab名称
         for (i in 0 until binding.tabLayout.tabCount) {
             val tabView = binding.tabLayout.getTabAt(i)?.customView
             if (tabView != null) {
@@ -251,38 +245,24 @@ class MainActivity : AppCompatActivity() {
                 val wallpaperModel = rootModelList[i]
                 val textName = tabView.findViewById<TextView>(R.id.text_wallpaper_name)
                 textName.text = wallpaperModel.name
-
-                // 创建viewpager的fragment集合,带 wallpaperModel 参数
                 fragmentList.add(ViewPagerFragment(wallpaperModel))
             }
         }
-
-        /**
-         * 设置 ViewPager 的 offscreenPageLimit 属性，指定 ViewPager 在当前页面附近应该保留多少个页面。
-         * 这样可以提前加载并保留附近的页面，以提高用户体验和流畅度。
-         * 通常设置为当前可见页面数量的一半或稍多一点。
-         */
         binding.viewpager.offscreenPageLimit = 3
-        // 创建 viewpager
+
         binding.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
-            // viewpager的数量
             override fun getCount(): Int {
                 return fragmentList.size
             }
-
-            // 绑定fragment
             override fun getItem(position: Int): Fragment {
                 return fragmentList[position]
             }
-
             override fun getPageTitle(position: Int): CharSequence {
                 return rootModelList[position].name
             }
         }
-        // 将tab已viewpager对应，实现跳转
         binding.tabLayout.setupWithViewPager(binding.viewpager)
         binding.viewpager.setPageTransformer(true, RotateDownPageTransformer())
-
         initDrawer()
     }
 
@@ -296,7 +276,6 @@ class MainActivity : AppCompatActivity() {
         binding.drawerShareCompose.setContent {
             DrawerShareCompose()
         }
-
         binding.drawerParent.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
             }

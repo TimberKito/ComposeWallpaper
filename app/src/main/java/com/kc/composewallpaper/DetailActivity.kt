@@ -18,14 +18,14 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
-import com.kc.composewallpaper.databinding.SetWallpaperBinding
+import com.kc.composewallpaper.databinding.ActivityDetailBinding
 import com.kc.composewallpaper.tools.DataModel
 import java.io.IOException
 
 
 class DetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: SetWallpaperBinding
+    private lateinit var binding: ActivityDetailBinding
     // 原图url
     private lateinit var sourceUrl: String
 
@@ -34,7 +34,7 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = SetWallpaperBinding.inflate(layoutInflater)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -98,10 +98,7 @@ class DetailActivity : AppCompatActivity() {
      * 设置壁纸
      */
     private fun onClickApply() {
-//        Log.e("onClickApply", "设置按钮已被点击")
-//        binding.pbProgress.visibility = View.VISIBLE
         binding.coverView.visibility = View.VISIBLE
-        // Disable user interaction
         window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
@@ -111,29 +108,12 @@ class DetailActivity : AppCompatActivity() {
     }
 
     inner class WallpaperDownloader : AsyncTask<String, Void, Bitmap?>() {
-        /**
-         * 从url下载图片转化为bitmap
-         */
         override fun doInBackground(vararg params: String?): Bitmap? {
-//            val urlString = params[0]
-//            var bitmap: Bitmap? = null
-//            try {
-//                val url = URL(urlString)
-//                val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-//                connection.doInput = true
-//                connection.connect()
-//                val inputStream: InputStream = connection.inputStream
-//                bitmap = BitmapFactory.decodeStream(inputStream)
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//            return bitmap
             val urlString = params[0]
             var bitmap: Bitmap? = null
             try {
                 bitmap = Glide.with(this@DetailActivity)
                     .asBitmap()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .load(urlString)
                     .submit()
                     .get()
@@ -144,7 +124,6 @@ class DetailActivity : AppCompatActivity() {
         }
 
         override fun onPostExecute(result: Bitmap?) {
-//            binding.pbProgress.visibility = View.INVISIBLE
             setWallpaper(result)
         }
 
@@ -177,30 +156,6 @@ class DetailActivity : AppCompatActivity() {
                 ).show()
             }
         }
-    }
-
-    private fun setWallpaper() {
-        // 获取 WallpaperManager 实例
-        val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(applicationContext)
-        // 使用 Glide 加载图片并设置为壁纸
-        Glide.with(this).asBitmap().load(sourceUrl).into(object : SimpleTarget<Bitmap>() {
-            override fun onResourceReady(
-                resource: Bitmap,
-                transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-            ) {
-                try {
-                    // 设置位图为壁纸
-                    wallpaperManager.setBitmap(resource)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    Toast.makeText(
-                        applicationContext,
-                        "Check if the network is connected!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        })
     }
 }
 

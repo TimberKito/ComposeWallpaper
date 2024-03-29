@@ -19,7 +19,6 @@ class ViewPagerFragment(private val rootModel: RootModel) : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
