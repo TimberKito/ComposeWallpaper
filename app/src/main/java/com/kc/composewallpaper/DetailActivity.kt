@@ -19,7 +19,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.kc.composewallpaper.databinding.SetWallpaperBinding
-import com.kc.composewallpaper.model.DataModel
+import com.kc.composewallpaper.tools.DataModel
 import java.io.IOException
 
 

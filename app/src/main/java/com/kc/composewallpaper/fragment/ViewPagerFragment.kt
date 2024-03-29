@@ -12,18 +12,14 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.kc.composewallpaper.R
 import com.kc.composewallpaper.DetailActivity
 import com.kc.composewallpaper.adapter.ViewPagerAdapter
-import com.kc.composewallpaper.model.DataModel
-import com.kc.composewallpaper.model.RootModel
+import com.kc.composewallpaper.tools.DataModel
+import com.kc.composewallpaper.tools.RootModel
 
 class ViewPagerFragment(private val rootModel: RootModel) : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val mode: List<InfoModel> = wallpaperModel.infoModel.subList(1, 5)
-//        for (i in mode) {
-//            Log.e("Data", i.preUrl)
-//        }
     }
 
     override fun onCreateView(

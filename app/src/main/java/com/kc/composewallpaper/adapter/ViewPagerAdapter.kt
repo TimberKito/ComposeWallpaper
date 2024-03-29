@@ -14,8 +14,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.kc.composewallpaper.R
 import com.kc.composewallpaper.tools.NetTools
-import com.kc.composewallpaper.model.DataModel
-import com.kc.composewallpaper.model.RootModel
+import com.kc.composewallpaper.tools.DataModel
+import com.kc.composewallpaper.tools.RootModel
 import java.io.InputStream
 
 class ViewPagerAdapter(

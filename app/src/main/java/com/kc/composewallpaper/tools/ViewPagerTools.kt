@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
 import androidx.viewpager.widget.ViewPager
+import com.nineoldandroids.view.ViewHelper
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -38,5 +39,40 @@ class ZoomOutPageTransformer : ViewPager.PageTransformer {
     companion object {
         private const val MIN_SCALE = 0.85f
         private const val MIN_ALPHA = 0.5f
+    }
+
+}
+
+
+class RotateDownPageTransformer : ViewPager.PageTransformer {
+    private var mRot = 0f
+    override fun transformPage(view: View, position: Float) {
+        Log.e("TAG", "$view , $position")
+        if (position < -1) { // [-Infinity,-1)
+            // This page is way off-screen to the left.
+            ViewHelper.setRotation(view, 0F)
+        } else if (position <= 1) // a页滑动至b页 ； a页从 0.0 ~ -1 ；b页从1 ~ 0.0
+        { // [-1,1]
+            // Modify the default slide transition to shrink the page as well
+            if (position < 0) {
+                mRot = ROT_MAX * position
+                ViewHelper.setPivotX(view, view.measuredWidth * 0.5f)
+                ViewHelper.setPivotY(view, view.measuredHeight.toFloat())
+                ViewHelper.setRotation(view, mRot)
+            } else {
+                mRot = ROT_MAX * position
+                ViewHelper.setPivotX(view, view.measuredWidth * 0.5f)
+                ViewHelper.setPivotY(view, view.measuredHeight.toFloat())
+                ViewHelper.setRotation(view, mRot)
+            }
+
+        } else { // (1,+Infinity]
+            // This page is way off-screen to the right.
+            ViewHelper.setRotation(view, 0F)
+        }
+    }
+
+    companion object {
+        private const val ROT_MAX = 20.0f
     }
 }

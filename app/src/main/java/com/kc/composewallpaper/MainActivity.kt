@@ -1,32 +1,34 @@
 package com.kc.composewallpaper
 
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.ColorScheme
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -38,10 +40,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import com.kc.composewallpaper.databinding.ActivityMainBinding
-import com.kc.composewallpaper.tools.Json2ModelSerializer
 import com.kc.composewallpaper.fragment.ViewPagerFragment
-import com.kc.composewallpaper.model.RootModel
+import com.kc.composewallpaper.tools.Json2ModelSerializer
 import com.kc.composewallpaper.tools.PhoneScreenTool
+import com.kc.composewallpaper.tools.RootModel
+import com.kc.composewallpaper.tools.RotateDownPageTransformer
 
 
 class MainActivity : AppCompatActivity() {
@@ -55,13 +58,14 @@ class MainActivity : AppCompatActivity() {
      */
     @Composable
     fun MenuCompose() {
-        Image(
-            painter = painterResource(id = R.drawable.svg_menu),
+        Image(painter = painterResource(id = R.drawable.svg_menu),
             contentDescription = null,
             modifier = Modifier
                 .padding(6.dp)
                 .size(40.dp)
-        )
+                .clickable {
+                    binding.drawerParent.openDrawer(GravityCompat.START)
+                })
     }
 
     /**
@@ -90,55 +94,139 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Drawer中的Logo
+     */
+    @Composable
+    fun DrawerTopCompose() {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(26.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Card(
+                modifier = Modifier
+                    .height(54.dp)
+                    .width(54.dp),
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Image(
+                    painter = painterResource(id = R.mipmap.logo),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(54.dp)
+                        .width(54.dp)
+                )
+            }
+
+            Text(
+                text = stringResource(id = R.string.app_name),
+                color = Color.Black,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(top = 10.dp)
+            )
+            fun getVersionName(): String {
+                val pInfo: PackageInfo
+                try {
+                    pInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        packageManager.getPackageInfo(
+                            packageName,
+                            PackageManager.PackageInfoFlags.of(0)
+                        )
+                    } else {
+                        packageManager.getPackageInfo(packageName, 0)
+                    }
+                } catch (e: PackageManager.NameNotFoundException) {
+                    return ""
+                }
+                return "Version: " + pInfo.versionName
+            }
+
+            val versionName = getVersionName()
+            Text(
+                text = versionName,
+                color = Color.Black,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+    }
+
+    @Composable
+    fun DrawerRateCompose() {
+        Row(verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(start = 25.dp)
+                .clickable {
+                    // 商店中包的位置
+                    val url = getString(R.string.share_link) + packageName
+                    // 创建intent打开链接
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setData(Uri.parse(url))
+                    startActivity(intent)
+                }) {
+            Image(
+                painter = painterResource(id = R.drawable.svg_google_play),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(27.dp),
+            )
+            Text(
+                text = stringResource(id = R.string.menu_rate),
+                color = Color.Black,
+                fontSize = 15.sp,
+                modifier = Modifier.padding(start = 20.dp)
+            )
+        }
+    }
+
+    @Composable
+    fun DrawerShareCompose() {
+        Row(verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(start = 25.dp)
+                .clickable {
+                    // 商店中包的位置
+                    val url = getString(R.string.share_link) + packageName
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.setType("text/plain")
+                    intent.putExtra(Intent.EXTRA_TEXT, url)
+                    startActivity(intent)
+                }) {
+            Image(
+                painter = painterResource(id = R.drawable.svg_share),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(27.dp),
+            )
+            Text(
+                text = stringResource(id = R.string.menu_share),
+                color = Color.Black,
+                fontSize = 15.sp,
+                modifier = Modifier.padding(start = 20.dp)
+            )
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-
         view.setPadding(0, PhoneScreenTool.getScreenSize(this), 0, 0)
         window.decorView.systemUiVisibility =
             (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE) or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         window.statusBarColor = android.graphics.Color.TRANSPARENT
+
         binding.menuCompose.setContent {
             MenuCompose()
         }
         binding.titleCompose.setContent {
             TitleCompose()
         }
-
-
-        // 绑定抽屉中的GOOGLE按钮
-        binding.layoutRate.setOnClickListener() {
-            viewUrl()
-        }
-        // 绑定抽屉中的分享按钮
-        binding.layoutShare.setOnClickListener() {
-            shareUrl()
-        }
-        // 绑定抽屉中的版本信息
-        val versionName = getVersionName()
-        binding.textAppVersion.text = versionName
-
-        // 打开抽屉
-//        binding.imageMenu.setOnClickListener() {
-//            binding.drawerParent.openDrawer(GravityCompat.START)
-//        }
-
-        binding.drawerParent.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-            }
-            override fun onDrawerOpened(drawerView: View) {
-                drawerView.isClickable = true
-            }
-            override fun onDrawerClosed(drawerView: View) {
-
-            }
-            override fun onDrawerStateChanged(newState: Int) {
-            }
-        })
-
         // 得到wallpaperModelList 并截取 3--15
         val rootModelList: MutableList<RootModel> = mutableListOf()
         rootModelList.addAll(
@@ -193,60 +281,35 @@ class MainActivity : AppCompatActivity() {
         }
         // 将tab已viewpager对应，实现跳转
         binding.tabLayout.setupWithViewPager(binding.viewpager)
+        binding.viewpager.setPageTransformer(true, RotateDownPageTransformer())
+
+        initDrawer()
     }
 
-    /**
-     * 获取应用程序的版本名称
-     * @return 应用程序的版本名称，如果获取失败则返回 null
-     */
-    private fun getVersionName(): String {
-        val pInfo: PackageInfo
-        try {
-            pInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
-            } else {
-                packageManager.getPackageInfo(packageName, 0)
+    private fun initDrawer() {
+        binding.drawerTopCompose.setContent {
+            DrawerTopCompose()
+        }
+        binding.drawerRateCompose.setContent {
+            DrawerRateCompose()
+        }
+        binding.drawerShareCompose.setContent {
+            DrawerShareCompose()
+        }
+
+        binding.drawerParent.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
             }
-        } catch (e: PackageManager.NameNotFoundException) {
-            return ""
-        }
-        return "Version: " + pInfo.versionName
-    }
 
-    /**
-     * 打开分享链接
-     */
-    private fun shareUrl() {
-        // 商店中包的位置
-        val url = getString(R.string.share_link) + packageName
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.setType("text/plain")
-        intent.putExtra(Intent.EXTRA_TEXT, url)
-        startActivity(intent)
-    }
+            override fun onDrawerOpened(drawerView: View) {
+                drawerView.isClickable = true
+            }
 
-    /**
-     * 打开商店链接
-     */
-    private fun viewUrl() {
-        // 商店中包的位置
-        val url = getString(R.string.share_link) + packageName
-        // 创建intent打开链接
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.setData(Uri.parse(url))
-        startActivity(intent)
-    }
+            override fun onDrawerClosed(drawerView: View) {
+            }
 
-    /**
-     * 自适应设备状态栏高度
-     */
-    private fun dpCovertPx(context: Context): Int {
-        // 获取当前设备的屏幕密度，并赋值给变量 scale
-        var result = 0
-        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-        if (resourceId > 0) {
-            result = context.resources.getDimensionPixelSize(resourceId)
-        }
-        return result
+            override fun onDrawerStateChanged(newState: Int) {
+            }
+        })
     }
 }
