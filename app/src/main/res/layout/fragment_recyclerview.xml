@@ -4,7 +4,7 @@
     android:id="@+id/info_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingEnd="4dp"
-    tools:context="fragment.ViewPagerFragment">
+    android:paddingEnd="8dp"
+    tools:context=".ViewPagerFragment">
 
 </androidx.recyclerview.widget.RecyclerView>

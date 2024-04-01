@@ -40,7 +40,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import com.kc.composewallpaper.databinding.ActivityMainBinding
-import com.kc.composewallpaper.fragment.ViewPagerFragment
 import com.kc.composewallpaper.tools.Json2ModelSerializer
 import com.kc.composewallpaper.tools.PhoneScreenTool
 import com.kc.composewallpaper.tools.RootModel
@@ -50,7 +49,6 @@ import com.kc.composewallpaper.tools.RotateDownPageTransformer
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
     private lateinit var fragmentList: ArrayList<Fragment>
 
     /**
@@ -250,7 +248,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.viewpager.offscreenPageLimit = 3
-
+        binding.viewpager.setPageTransformer(true, RotateDownPageTransformer())
         binding.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getCount(): Int {
                 return fragmentList.size
@@ -263,8 +261,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.tabLayout.setupWithViewPager(binding.viewpager)
-        binding.viewpager.setPageTransformer(true, RotateDownPageTransformer())
-
     }
 
     private fun initDrawer() {

@@ -4,18 +4,18 @@
     <value>
       <entry key="MainActivity">
         <State>
-          <runningDeviceTargetSelectedWithDropDown>
+          <targetSelectedWithDropDown>
             <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
+              <type value="QUICK_BOOT_TARGET" />
               <deviceKey>
                 <Key>
-                  <type value="SERIAL_NUMBER" />
-                  <value value="ZX1G22HXL8" />
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\timbe\.android\avd\Pixel_8_API_34.avd" />
                 </Key>
               </deviceKey>
             </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-29T09:09:07.984069200Z" />
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-04-01T01:43:00.366573800Z" />
         </State>
       </entry>
       <entry key="Preview">

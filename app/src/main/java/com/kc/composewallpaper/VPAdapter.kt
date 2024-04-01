@@ -1,4 +1,4 @@
-package com.kc.composewallpaper.adapter
+package com.kc.composewallpaper
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -12,15 +12,14 @@ import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.kc.composewallpaper.R
 import com.kc.composewallpaper.tools.NetTools
 import com.kc.composewallpaper.tools.DataModel
 import com.kc.composewallpaper.tools.RootModel
 import java.io.InputStream
 
-class ViewPagerAdapter(
+class VPAdapter(
     private val context: Context, model: RootModel, private val listener: OnItemClickListener
-) : RecyclerView.Adapter<ViewPagerAdapter.ThumbVH>() {
+) : RecyclerView.Adapter<VPAdapter.ThumbVH>() {
 
     private val infoModels = model.data
     interface OnItemClickListener {
@@ -58,8 +57,7 @@ class ViewPagerAdapter(
     override fun onBindViewHolder(holder: ThumbVH, position: Int) {
         val infoModel = infoModels[position % infoModels.size]
         holder.loadItemImg(context, infoModel.previewThumb, holder.imgItemView)
-
-        holder.rootItemLayout.setOnClickListener() {
+        holder.rootItemLayout.setOnClickListener {
             listener.onItemClick(position, infoModel)
         }
     }

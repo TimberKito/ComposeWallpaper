@@ -2,6 +2,7 @@ package com.kc.composewallpaper
 
 import android.app.AlertDialog
 import android.app.WallpaperManager
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.AsyncTask
@@ -35,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -51,6 +53,7 @@ import java.io.IOException
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var sourceUrl: String
+    private lateinit var wallpaperDownloader: WallpaperDownloader
 
     @Composable
     fun BackCompose() {
@@ -78,39 +81,9 @@ class DetailActivity : AppCompatActivity() {
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                 )
-                val wallpaperManager: WallpaperManager =
-                    WallpaperManager.getInstance(applicationContext)
-                Glide.with(this).asBitmap().load(sourceUrl).into(object : SimpleTarget<Bitmap>() {
-                    override fun onResourceReady(
-                        resource: Bitmap,
-                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-                    ) {
-                        try {
-                            wallpaperManager.setBitmap(resource)
-                            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                            binding.coverView.visibility = View.GONE
-                            Toast.makeText(
-                                applicationContext,
-                                "Wallpaper set successfully!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                    val builder = AlertDialog.Builder(this@DetailActivity)
-                    builder.setMessage("Wallpaper set successfully!").setCancelable(false)
-                        .setPositiveButton("OK") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                    val dialog = builder.create()
-                    dialog.show()
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                            Toast.makeText(
-                                applicationContext,
-                                "Check if the network is connected!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                })
+//                wallpaperDownloader = WallpaperDownloader()
+//                wallpaperDownloader.execute(sourceUrl)
+                setWallpaper()
             }, shape = RoundedCornerShape(28.dp), colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White, contentColor = Color.Black
             )
@@ -133,6 +106,8 @@ class DetailActivity : AppCompatActivity() {
             BackCompose()
         }
         binding.backCompose.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this,MainActivity::class.java)
+            startActivity(intent)
             finish()
         })
         binding.applyCompose.setContent {
@@ -164,6 +139,114 @@ class DetailActivity : AppCompatActivity() {
             }
         }).into(binding.imageSource)
     }
+
+    inner class WallpaperDownloader : AsyncTask<String, Void, Bitmap?>() {
+        /**
+         * 从url下载图片转化为bitmap
+         */
+        override fun doInBackground(vararg params: String?): Bitmap? {
+//            val urlString = params[0]
+//            var bitmap: Bitmap? = null
+//            try {
+//                val url = URL(urlString)
+//                val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+//                connection.doInput = true
+//                connection.connect()
+//                val inputStream: InputStream = connection.inputStream
+//                bitmap = BitmapFactory.decodeStream(inputStream)
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            }
+//            return bitmap
+            val urlString = params[0]
+            var bitmap: Bitmap? = null
+            try {
+                bitmap = Glide.with(this@DetailActivity)
+                    .asBitmap()
+                    .load(urlString)
+                    .submit()
+                    .get()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return bitmap
+        }
+
+        override fun onPostExecute(result: Bitmap?) {
+//            binding.pbProgress.visibility = View.INVISIBLE
+            setWallpaper(result)
+        }
+
+        // 用bitmap设置壁纸
+        private fun setWallpaper(bitmap: Bitmap?) {
+            if (bitmap != null) {
+                val wallpaperManager = WallpaperManager.getInstance(applicationContext)
+                try {
+                    wallpaperManager.setBitmap(bitmap)
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                    binding.coverView.visibility = View.GONE
+                    Toast.makeText(
+                        applicationContext, "Wallpaper set successfully!", Toast.LENGTH_SHORT
+                    ).show()
+//                    val builder = AlertDialog.Builder(this@SetImgActivity)
+//                    builder.setMessage("Wallpaper set successfully!").setCancelable(false)
+//                        .setPositiveButton("OK") { dialog, _ ->
+//                            dialog.dismiss()
+//                        }
+//                    val dialog = builder.create()
+//                    dialog.show()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.coverView.visibility = View.GONE
+                Toast.makeText(
+                    applicationContext, "Check network connection!", Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+
+    private fun setWallpaper() {
+        // 获取 WallpaperManager 实例
+        val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(applicationContext)
+        // 使用 Glide 加载图片并设置为壁纸
+        Glide.with(this).asBitmap().load(sourceUrl).into(object : SimpleTarget<Bitmap>() {
+            override fun onResourceReady(
+                resource: Bitmap,
+                transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+            ) {
+                try {
+                    // 设置位图为壁纸
+                    wallpaperManager.setBitmap(resource)
+
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                    binding.coverView.visibility = View.GONE
+                    Toast.makeText(
+                        applicationContext, "Wallpaper set successfully!", Toast.LENGTH_SHORT
+                    ).show()
+                    val builder = AlertDialog.Builder(this@DetailActivity)
+                    builder.setMessage("Wallpaper set successfully!").setCancelable(false)
+                        .setPositiveButton("OK") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                    val dialog = builder.create()
+                    dialog.show()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    Toast.makeText(
+                        applicationContext,
+                        "Check if the network is connected!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+    }
+
+
 }
 
 

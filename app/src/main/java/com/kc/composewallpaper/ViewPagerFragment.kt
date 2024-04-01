@@ -1,4 +1,4 @@
-package com.kc.composewallpaper.fragment
+package com.kc.composewallpaper
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,9 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.kc.composewallpaper.R
-import com.kc.composewallpaper.DetailActivity
-import com.kc.composewallpaper.adapter.ViewPagerAdapter
 import com.kc.composewallpaper.tools.DataModel
 import com.kc.composewallpaper.tools.RootModel
 
@@ -25,10 +22,10 @@ class ViewPagerFragment(private val rootModel: RootModel) : Fragment() {
         val view = inflater.inflate(R.layout.fragment_recyclerview, container, false)
         val infoRecyclerView: RecyclerView = view.findViewById(R.id.info_recycler_view)
         infoRecyclerView.layoutManager = StaggeredGridLayoutManager(2, VERTICAL)
-        val viewPagerAdapter: ViewPagerAdapter = ViewPagerAdapter(
+        val viewPagerAdapter: VPAdapter = VPAdapter(
             requireContext(),
             rootModel,
-            object : ViewPagerAdapter.OnItemClickListener {
+            object : VPAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int, dataModel: DataModel) {
                     // 跳转详情页面并传递该页面的参数
                     val intent = Intent(requireContext(), DetailActivity::class.java)
