@@ -53,7 +53,6 @@ import java.io.IOException
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var sourceUrl: String
-    private lateinit var wallpaperDownloader: WallpaperDownloader
 
     @Composable
     fun BackCompose() {

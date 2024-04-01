@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,38 +12,43 @@
         android:layout_height="match_parent">
 
         <!--主视图-->
+
+        <!--抽屉视图-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/backgroundLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <!--菜单按钮-->
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/menu_compose"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+            <!--            <androidx.compose.ui.platform.ComposeView-->
+            <!--                android:id="@+id/menu_compose"-->
+            <!--                android:layout_width="40dp"-->
+            <!--                android:layout_height="40dp"-->
+            <!--                app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"/>-->
 
-            <!--上方标题-->
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/title_compose"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <!--            &lt;!&ndash;上方标题&ndash;&gt;-->
+            <!--            <androidx.compose.ui.platform.ComposeView-->
+            <!--                android:id="@+id/title_compose"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="40dp"-->
+            <!--                app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--                app:layout_constraintRight_toRightOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
             <!--tab-->
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+
+                android:layout_height="60dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title_compose"
+                app:layout_constraintTop_toTopOf="parent"
                 app:tabIndicatorColor="@color/theme_color"
+
                 app:tabIndicatorFullWidth="false"
+
                 app:tabMode="scrollable" />
             <!--内容-->
             <androidx.viewpager.widget.ViewPager
@@ -55,12 +60,12 @@
                 app:layout_constraintTop_toBottomOf="@id/tabLayout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--抽屉视图-->
         <RelativeLayout
             android:id="@+id/drawer_recycler_view"
-            android:layout_width="280dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
+            android:layout_marginEnd="-65dp"
+            android:layout_gravity="end"
             android:background="@color/white">
             <!--抽屉头部-->
             <androidx.compose.ui.platform.ComposeView
@@ -68,26 +73,71 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/drawerRate_compose"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:layout_below="@id/drawerTop_compose"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical" />
 
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/drawerShare_compose"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="48dp"
                 android:layout_below="@id/drawerRate_compose"
-                android:gravity="center_vertical"/>
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical" />
 
         </RelativeLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
-</LinearLayout>
+
+    <!--    MaterialButtonToggleGroup实现的LinearLayout接口-->
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggle_group"
+        android:layout_width="180dp"
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        app:checkedButton="@+id/bt1"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <!--        android:layout_weight="1"设置权重,宽度自定义-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt1"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/theme_color"
+            android:text="@string/but_home"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+            app:cornerRadius="26dp"
+            app:icon="@drawable/svg_home"
+            app:iconGravity="textTop" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt2"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/theme_color"
+            android:text="@string/but_info"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+            app:cornerRadius="26dp"
+            app:icon="@drawable/icon_menu_expand"
+            app:iconGravity="textTop" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+</RelativeLayout>
 
 
 

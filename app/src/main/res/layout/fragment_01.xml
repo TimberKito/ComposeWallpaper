@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <!--主视图-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/backgroundLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--tab-->
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="wrap_content"
+
+                android:layout_height="66dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabIndicatorColor="@color/theme_color"
+
+                app:tabIndicatorFullWidth="false"
+
+                app:tabMode="scrollable" />
+            <!--内容-->
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--    MaterialButtonToggleGroup实现的LinearLayout接口-->
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggle_group"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        app:selectionRequired="false"
+        app:singleSelection="true">
+        <!--        android:layout_weight="1"设置权重,宽度自定义-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_home"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/theme_color"
+            android:text="tab1"
+            android:textColor="#fff000"
+            android:textSize="18dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_open"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/purple_200"
+            android:text="tab2"
+            android:textColor="@color/teal_700"
+            android:textSize="18dp" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+</RelativeLayout>
+
+
+

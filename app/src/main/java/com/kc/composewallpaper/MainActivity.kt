@@ -3,10 +3,14 @@ package com.kc.composewallpaper
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
+import android.widget.TableLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -35,10 +39,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.tabs.TabLayout
 import com.kc.composewallpaper.databinding.ActivityMainBinding
 import com.kc.composewallpaper.tools.Json2ModelSerializer
 import com.kc.composewallpaper.tools.PhoneScreenTool
@@ -130,8 +138,7 @@ class MainActivity : AppCompatActivity() {
                 try {
                     pInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         packageManager.getPackageInfo(
-                            packageName,
-                            PackageManager.PackageInfoFlags.of(0)
+                            packageName, PackageManager.PackageInfoFlags.of(0)
                         )
                     } else {
                         packageManager.getPackageInfo(packageName, 0)
@@ -168,13 +175,12 @@ class MainActivity : AppCompatActivity() {
             Image(
                 painter = painterResource(id = R.drawable.svg_google_play),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(27.dp),
+                modifier = Modifier.size(27.dp),
             )
             Text(
                 text = stringResource(id = R.string.menu_rate),
                 color = Color.Black,
-                fontSize = 15.sp,
+                fontSize = 18.sp,
                 modifier = Modifier.padding(start = 20.dp)
             )
         }
@@ -196,13 +202,12 @@ class MainActivity : AppCompatActivity() {
             Image(
                 painter = painterResource(id = R.drawable.svg_share),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(27.dp),
+                modifier = Modifier.size(27.dp),
             )
             Text(
                 text = stringResource(id = R.string.menu_share),
                 color = Color.Black,
-                fontSize = 15.sp,
+                fontSize = 18.sp,
                 modifier = Modifier.padding(start = 20.dp)
             )
         }
@@ -219,12 +224,13 @@ class MainActivity : AppCompatActivity() {
             (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE) or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         window.statusBarColor = android.graphics.Color.TRANSPARENT
 
-        binding.menuCompose.setContent {
-            MenuCompose()
-        }
-        binding.titleCompose.setContent {
-            TitleCompose()
-        }
+//        binding.menuCompose.setContent {
+//            MenuCompose()
+//        }
+//        binding.titleCompose.setContent {
+//            TitleCompose()
+//        }
+
         initDrawer()
         val rootModelList: MutableList<RootModel> = mutableListOf()
         rootModelList.addAll(
@@ -233,7 +239,7 @@ class MainActivity : AppCompatActivity() {
         rootModelList.shuffle()
         for (i in rootModelList) {
             binding.tabLayout.addTab(
-                binding.tabLayout.newTab().setCustomView(R.layout.tab_item_view)
+                binding.tabLayout.newTab().setCustomView(R.layout.tab_item)
             )
         }
         fragmentList = arrayListOf()
@@ -247,23 +253,72 @@ class MainActivity : AppCompatActivity() {
                 fragmentList.add(ViewPagerFragment(wallpaperModel))
             }
         }
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                setTabSize(p0)
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {
+//                val customView = p0?.customView
+//                if (customView != null) {
+//                    val tabTextView = customView.findViewById<TextView>(R.id.text_wallpaper_name)
+//                    tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14.toFloat())
+//                }
+                p0?.customView = null
+            }
+
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+                // null
+            }
+
+        })
+
         binding.viewpager.offscreenPageLimit = 3
         binding.viewpager.setPageTransformer(true, RotateDownPageTransformer())
         binding.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getCount(): Int {
                 return fragmentList.size
             }
+
             override fun getItem(position: Int): Fragment {
                 return fragmentList[position]
             }
+
             override fun getPageTitle(position: Int): CharSequence {
                 return rootModelList[position].name
             }
         }
         binding.tabLayout.setupWithViewPager(binding.viewpager)
+
+        val toggleGroup = findViewById<MaterialButtonToggleGroup>(R.id.toggle_group)
+        toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.bt1 -> binding.drawerParent.closeDrawer(GravityCompat.END)
+                    R.id.bt2 -> binding.drawerParent.openDrawer(GravityCompat.END)
+                }
+            }
+        }
     }
 
+    private fun setTabSize(p0: TabLayout.Tab?) {
+        val textView = TextView(this)
+        //字体样式
+        val selectedSize =
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, 22f, resources.displayMetrics)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, selectedSize)
+        textView.typeface = Typeface.defaultFromStyle(Typeface.BOLD) //加粗
+        textView.gravity = Gravity.CENTER
+        //选中的字体颜色
+        textView.setTextColor(ContextCompat.getColor(this, R.color.theme_color))
+        textView.text = p0!!.text
+        p0.customView = textView
+    }
+
+
     private fun initDrawer() {
+        binding.drawerParent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+
         binding.drawerTopCompose.setContent {
             DrawerTopCompose()
         }
@@ -287,5 +342,10 @@ class MainActivity : AppCompatActivity() {
             override fun onDrawerStateChanged(newState: Int) {
             }
         })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        finish()
     }
 }

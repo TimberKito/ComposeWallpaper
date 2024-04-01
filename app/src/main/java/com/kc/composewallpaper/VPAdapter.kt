@@ -22,9 +22,11 @@ class VPAdapter(
 ) : RecyclerView.Adapter<VPAdapter.ThumbVH>() {
 
     private val infoModels = model.data
+
     interface OnItemClickListener {
         fun onItemClick(position: Int, dataModel: DataModel)
     }
+
     inner class ThumbVH(view: View) : RecyclerView.ViewHolder(view) {
         val imgItemView: ImageView = itemView.findViewById(R.id.image_item)
         val rootItemLayout = itemView.findViewById<LinearLayout>(R.id.root_layout)
@@ -38,10 +40,10 @@ class VPAdapter(
                     .load(preUrl)
                     .apply(
                         RequestOptions()
-                            .placeholder(R.drawable.img_loading)
+                            .placeholder(R.drawable.png_loading)
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
-                    .error(R.drawable.img_loading_err)
+                    .error(R.drawable.png_loading_err)
                     .into(imageViewThumb)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -50,7 +52,7 @@ class VPAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThumbVH {
-        val view = LayoutInflater.from(context).inflate(R.layout.img_item_view, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.img_item, parent, false)
         return ThumbVH(view)
     }
 
@@ -61,6 +63,7 @@ class VPAdapter(
             listener.onItemClick(position, infoModel)
         }
     }
+
     override fun getItemCount(): Int {
         return Int.MAX_VALUE
     }

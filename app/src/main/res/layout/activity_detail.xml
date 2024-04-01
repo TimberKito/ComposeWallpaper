@@ -6,20 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
 
+    <!--    返回按钮-->
     <ImageView
         android:id="@+id/image_source"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY" />
 
-<!--    返回按钮-->
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/back_compose"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="60dp"
-        />
+        android:layout_marginTop="60dp" />
+
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/apply_compose"
         android:layout_width="match_parent"
@@ -29,14 +29,16 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/drw_btn_bg"
-        android:gravity="center"/>
+        android:background="@drawable/drw_base"
+        android:gravity="center" />
+
     <RelativeLayout
         android:id="@+id/cover_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#BF000000"
         android:visibility="gone">
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -60,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/svg_img_loading_err"
+        android:src="@drawable/svg_loading_err"
         android:visibility="invisible" />
 
 </RelativeLayout>

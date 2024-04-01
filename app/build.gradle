@@ -82,4 +82,7 @@ dependencies {
     implementation 'com.nineoldandroids:library:2.4.0'
 
 
+    def nav_version = "2.3.5"
+    implementation libs.navigation.fragment
+    implementation libs.androidx.navigation.ui
 }

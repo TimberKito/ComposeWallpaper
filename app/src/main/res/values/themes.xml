@@ -22,4 +22,12 @@
 
     <style name="Theme.WallpaperApp" parent="Theme.ComposeWallpaper" />
 
+    <style name="TabLayoutSelectedTextAppearance">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TabLayoutTextAppearance">
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
