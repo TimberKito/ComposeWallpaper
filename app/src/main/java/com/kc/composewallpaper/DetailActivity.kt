@@ -87,7 +87,7 @@ class DetailActivity : AppCompatActivity() {
                 containerColor = Color.White, contentColor = Color.Black
             )
         ) {
-            Text(text = "Apply", color = Color.Black)
+            Text(text = "Set Wallpaper", color = Color.Black)
         }
     }
 

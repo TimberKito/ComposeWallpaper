@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                 shape = RoundedCornerShape(12.dp),
             ) {
                 Image(
-                    painter = painterResource(id = R.mipmap.logo),
+                    painter = painterResource(id = R.mipmap.icon_logo),
                     contentDescription = null,
                     modifier = Modifier
                         .height(54.dp)
