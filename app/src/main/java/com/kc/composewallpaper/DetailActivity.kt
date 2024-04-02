@@ -93,7 +93,7 @@ class DetailActivity : AppCompatActivity() {
             BackCompose()
         }
         binding.backCompose.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         })
@@ -200,30 +200,61 @@ class DetailActivity : AppCompatActivity() {
         // 获取 WallpaperManager 实例
         val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(applicationContext)
         // 使用 Glide 加载图片并设置为壁纸
-        Glide.with(this).asBitmap().load(sourceUrl).into(object : SimpleTarget<Bitmap>() {
-            override fun onResourceReady(
-                resource: Bitmap,
-                transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-            ) {
-                try {
-                    // 设置位图为壁纸
-                    wallpaperManager.setBitmap(resource)
+        Glide.with(this).asBitmap().load(sourceUrl)
 
+            .listener(object : RequestListener<Bitmap> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Bitmap>,
+                    isFirstResource: Boolean
+                ): Boolean {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     binding.coverView.visibility = View.GONE
-                    Toast.makeText(
-                        applicationContext, "Wallpaper set successfully!", Toast.LENGTH_SHORT
-                    ).show()
-                } catch (e: IOException) {
-                    e.printStackTrace()
                     Toast.makeText(
                         applicationContext,
                         "Check if the network is connected!",
                         Toast.LENGTH_SHORT
                     ).show()
+                    return true
                 }
-            }
-        })
+
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    model: Any,
+                    target: Target<Bitmap>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+            })
+
+            .into(object : SimpleTarget<Bitmap>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                ) {
+                    try {
+                        // 设置位图为壁纸
+                        wallpaperManager.setBitmap(resource)
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                        binding.coverView.visibility = View.GONE
+                        Toast.makeText(
+                            applicationContext, "Wallpaper set successfully!", Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+//                        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+//                        binding.coverView.visibility = View.GONE
+//                        Toast.makeText(
+//                            applicationContext,
+//                            "Check if the network is connected!",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+                    }
+                }
+            })
     }
 }
 

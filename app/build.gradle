@@ -4,6 +4,14 @@ plugins {
 }
 
 android {
+//    signingConfigs {
+//        debug {
+//            storeFile file('D:\\Android_Files\\ComposeWallpaper\\info\\landscape_wallpaper.jks')
+//            storePassword 'compose123'
+//            keyPassword 'compose123'
+//            keyAlias 'com_wall'
+//        }
+//    }
     namespace 'com.kc.composewallpaper'
     compileSdk 34
 
@@ -22,6 +30,10 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

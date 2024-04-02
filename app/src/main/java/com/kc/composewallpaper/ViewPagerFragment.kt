@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.kc.composewallpaper.tools.DataModel
-import com.kc.composewallpaper.tools.RootModel
+import com.kc.composewallpaper.model.DataModel
+import com.kc.composewallpaper.model.RootModel
 
 class ViewPagerFragment(private val rootModel: RootModel) : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
