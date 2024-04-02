@@ -1,6 +1,5 @@
 package com.kc.composewallpaper
 
-import android.app.AlertDialog
 import android.app.WallpaperManager
 import android.content.Intent
 import android.graphics.Bitmap
@@ -14,39 +13,28 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
-import com.google.android.filament.Colors
 import com.kc.composewallpaper.databinding.ActivityDetailBinding
-import com.kc.composewallpaper.tools.DataModel
-import okhttp3.internal.wait
+import com.kc.composewallpaper.model.DataModel
 import java.io.IOException
 
 
@@ -226,13 +214,6 @@ class DetailActivity : AppCompatActivity() {
                     Toast.makeText(
                         applicationContext, "Wallpaper set successfully!", Toast.LENGTH_SHORT
                     ).show()
-                    val builder = AlertDialog.Builder(this@DetailActivity)
-                    builder.setMessage("Wallpaper set successfully!").setCancelable(false)
-                        .setPositiveButton("OK") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                    val dialog = builder.create()
-                    dialog.show()
                 } catch (e: IOException) {
                     e.printStackTrace()
                     Toast.makeText(
@@ -244,8 +225,6 @@ class DetailActivity : AppCompatActivity() {
             }
         })
     }
-
-
 }
 
 

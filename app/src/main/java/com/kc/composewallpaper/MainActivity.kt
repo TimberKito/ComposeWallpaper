@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.widget.TableLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -44,14 +43,13 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.tabs.TabLayout
 import com.kc.composewallpaper.databinding.ActivityMainBinding
-import com.kc.composewallpaper.tools.Json2ModelSerializer
 import com.kc.composewallpaper.tools.PhoneScreenTool
-import com.kc.composewallpaper.tools.RootModel
+import com.kc.composewallpaper.model.RootModel
 import com.kc.composewallpaper.tools.RotateDownPageTransformer
+import com.kc.composewallpaper.model.parseJsonFromAssets
 
 
 class MainActivity : AppCompatActivity() {
@@ -233,9 +231,10 @@ class MainActivity : AppCompatActivity() {
 
         initDrawer()
         val rootModelList: MutableList<RootModel> = mutableListOf()
-        rootModelList.addAll(
-            Json2ModelSerializer.parseJsonFile(assets.open("my_wallpaper.json"))
-        )
+       val result =  parseJsonFromAssets(this@MainActivity,"my_wallpaper.json")
+        if (result != null) {
+            rootModelList.addAll(result)
+        }
         rootModelList.shuffle()
         for (i in rootModelList) {
             binding.tabLayout.addTab(
